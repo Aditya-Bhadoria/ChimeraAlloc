@@ -1,5 +1,5 @@
 /*
- * test_freelist.c — correctness tests for the HAlloc free-list allocator.
+ * test_freelist.c — correctness tests for the ChimeraAlloc free-list allocator.
  *
  * Tests:
  *   1. Alignment  — every pointer returned is 16-byte aligned.
@@ -277,7 +277,7 @@ static void test_stats(void)
  * ---------------------------------------------------------------------- */
 int main(void)
 {
-    printf("HAlloc — free-list allocator tests\n");
+    printf("ChimeraAlloc — free-list allocator tests\n");
     printf("====================================\n");
 
     test_alignment();

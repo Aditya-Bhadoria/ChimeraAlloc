@@ -1,5 +1,5 @@
 /*
- * test_slab.c — correctness tests for the HAlloc slab allocator.
+ * test_slab.c — correctness tests for the ChimeraAlloc slab allocator.
  *
  * Tests:
  *   1. Alignment    — every returned pointer is 16-byte aligned.
@@ -381,7 +381,7 @@ static void test_unified_api(void)
  * ---------------------------------------------------------------------- */
 int main(void)
 {
-    printf("HAlloc — slab allocator tests\n");
+    printf("ChimeraAlloc — slab allocator tests\n");
     printf("===============================\n");
 
     test_alignment();

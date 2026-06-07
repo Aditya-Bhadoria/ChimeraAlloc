@@ -26,11 +26,11 @@
  *
  * ── Benchmark summary ────────────────────────────────────────────────────
  *  1. Small fixed 64B   — 1 M alloc+free pairs, 64 bytes
- *                         Variants: HAlloc slab, HAlloc free-list, system malloc
+ *                         Variants: ChimeraAlloc slab, ChimeraAlloc free-list, system malloc
  *  2. Mixed sizes       — 1 M alloc+free pairs, sizes ∈ {8…4096}
- *                         Variants: HAlloc halloc (unified), system malloc
+ *                         Variants: ChimeraAlloc halloc (unified), system malloc
  *  3. Fragmentation     — 10K allocs, free every other, 5K more
- *                         Reports external frag ratio and peak RSS
+ *                         Reports external frag ratio and free-block stats
  *  4. Locality          — 1 K alloc + write + read/sum + verify, 64 bytes
  *                         Tests cache-line locality of slab vs system malloc
  *  5. Realloc 64→128→64 — 100 K objects, two realloc rounds
@@ -47,29 +47,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdint.h>
 #include <time.h>
 
 /* ── Escape hatch ──────────────────────────────────────────────────────── */
 static volatile uintptr_t sink;
 
-/* ── RSS helper (Linux /proc/self/status) ─────────────────────────────── */
-static long rss_kb(void)
-{
-    FILE *f = fopen("/proc/self/status", "r");
-    if (!f) return -1;
-    char line[256];
-    long kb = -1;
-    while (fgets(line, sizeof(line), f)) {
-        if (strncmp(line, "VmRSS:", 6) == 0) {
-            sscanf(line + 6, " %ld", &kb);
-            break;
-        }
-    }
-    fclose(f);
-    return kb;
-}
 
 /* ── Table helpers ─────────────────────────────────────────────────────────
  *
@@ -224,7 +207,6 @@ static void b3_frag(void)
 
     FLStats st;
     fl_stats(&st);
-    long rss = rss_kb();
 
     printf("\nFragmentation after churn (%d alloc / free-half / %d more):\n",
            B3_INIT, B3_EXTRA);
@@ -233,10 +215,6 @@ static void b3_frag(void)
     printf("  Internal frag  : %zu bytes\n", st.internal_frag);
     printf("  Free blocks    : %zu\n", st.num_free_blocks);
     printf("  Largest free   : %zu bytes\n", st.largest_free_block);
-    if (rss >= 0)
-        printf("  Peak RSS       : %.1f MB\n", rss / 1024.0);
-    else
-        printf("  Peak RSS       : (unavailable on this platform)\n");
 
     for (int i = 1; i < B3_INIT; i += 2) fl_free(a[i]);
     for (int i = 0; i < B3_EXTRA;  i++)  fl_free(b[i]);

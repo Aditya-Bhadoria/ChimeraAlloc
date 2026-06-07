@@ -86,7 +86,6 @@ Fragmentation after churn (10K alloc / free half / 5K more):
   Internal frag : 46 756 bytes
   Free blocks   : 443
   Largest free  : ~4.1 MB
-  Peak RSS      : ~44 MB
 ```
 
 **Reading the numbers:**
@@ -114,7 +113,6 @@ make clean    # remove all compiled objects and binaries
 
 **Requirements:** GCC or Clang with AddressSanitizer support (`-fsanitize=address,undefined`), Linux or macOS (for `mmap(MAP_ANONYMOUS | MAP_PRIVATE)`).
 
-**Note on RSS reporting:** The fragmentation benchmark reads `/proc/self/status` for peak RSS, which is Linux-specific. On macOS, this will gracefully report `(unavailable on this platform)` - everything else runs identically.
 
 ---
 

@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 /*
- * Slab allocator — Phase 2 of HAlloc.
+ * Slab allocator — Phase 2 of ChimeraAlloc.
  *
  * Handles fixed-size allocations up to SLAB_MAX_SIZE bytes.
  * Larger requests fall through to the free-list allocator via the
