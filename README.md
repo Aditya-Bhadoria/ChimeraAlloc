@@ -1,6 +1,6 @@
 # ChimeraAlloc
 
-> A high-performance, from-scratch memory allocator in C - two allocation strategies fused into one unified API.
+A high-performance, from-scratch memory allocator in C - two allocation strategies fused into one unified API.
 
 ChimeraAlloc is named after the mythological hybrid: just as the chimera is part lion, part goat, part serpent, this allocator fuses a **bitmap slab allocator** and a **boundary-tag free-list allocator** under a single routing layer. Every design decision is commented in the source so you can follow the reasoning alongside the code.
 
@@ -114,7 +114,7 @@ make clean    # remove all compiled objects and binaries
 
 **Requirements:** GCC or Clang with AddressSanitizer support (`-fsanitize=address,undefined`), Linux or macOS (for `mmap(MAP_ANONYMOUS | MAP_PRIVATE)`).
 
-> **Note on RSS reporting:** The fragmentation benchmark reads `/proc/self/status` for peak RSS, which is Linux-specific. On macOS, this will gracefully report `(unavailable on this platform)` - everything else runs identically.
+**Note on RSS reporting:** The fragmentation benchmark reads `/proc/self/status` for peak RSS, which is Linux-specific. On macOS, this will gracefully report `(unavailable on this platform)` - everything else runs identically.
 
 ---
 
